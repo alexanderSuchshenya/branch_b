@@ -27,12 +27,15 @@ int main()
 	for (int i = 0; i < N; i++) cout << values[i] << ":" << masses[i] << endl;
 
 	// go for a good evaluation
-	int m = 0; int eval = 0; 
-	while (m < N && eval < limit)
+	int m = 0; int eval = 0; int weight = 0; 
+	for (int i = 0; i < N; i++)
 	{
-		if (masses[m] < limit)
-			eval = eval + masses[m];
-		m = m + 1;
+		if (masses[i] < limit - weight)
+		{
+			eval = eval + values[i];
+			weight = weight + masses[i];
+			m = m + 1;
+		}
 	}
 
 	// if all together fit - leave them be
@@ -40,8 +43,7 @@ int main()
 	// if not ask about improving
 	else
 	{
-		eval = eval - masses[m-1];
-		cout << "maximum evaluated by: " << eval << endl;
+		cout << "maximum evaluated by: " << eval << " (" << m << " items)" << endl;
 		cout << "  type 'l' to leave evaluation as an answer" << endl;
 		cout << "  type 'i' to try to improve evaluation" << endl;
 		cout << "  type 'n' to look for a limited maximum" << endl;
@@ -56,7 +58,7 @@ int main()
 		else if (ans == 'i')
 		{
 			cout << "improving ..." << endl;
-			cout << "maximum evaluated by: " << getnsplice(masses, values, vector<bool>(N,false), limit, m) << endl;
+			cout << "maximum evaluated by: " << getnsplice(masses, values, vector<bool>(N,false), limit, m+1) << endl;
 		}
 		else if (ans == 'n')
 		{
